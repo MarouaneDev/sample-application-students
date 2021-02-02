@@ -37,7 +37,7 @@ jobs:
         - cd sample-application-frontend
       script:
         - echo "Docker build ..."
-        - docker build -t $dockerid/backend .
+        - docker build -t $DOCKER_ID/backend .
         - echo "Docker login ..."
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
         - echo "Docker push ..."
