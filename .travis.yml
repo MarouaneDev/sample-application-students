@@ -3,7 +3,6 @@ git:
 stages:
   - "Build and Test"
   - "Package"
-  - if: branch = develop
 jobs:
   include:
     - stage: "Build and Test"
@@ -22,19 +21,27 @@ jobs:
       script:
         - echo "NPM install and build"
     - stage: "Package"
+      if: branch = develop
       before_script:
         - cd sample-application-backend
       script:
         - echo "Docker build ..."
+        - docker build -t $DOCKER_ID/backend .
         - echo "Docker login ..."
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
         - echo "Docker push ..."
+        - docker push $DOCKER_ID/backend
     - stage: "Package"
+      if: branch = develop
       before_script:
         - cd sample-application-frontend
       script:
         - echo "Docker build ..."
+        - docker build -t $dockerid/backend .
         - echo "Docker login ..."
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
         - echo "Docker push ..."
+        - docker push $DOCKER_ID/backend
 cache:
   directories:
     - "$HOME/.m2/repository"
